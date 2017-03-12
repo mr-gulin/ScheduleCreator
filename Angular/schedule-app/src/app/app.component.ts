@@ -31,15 +31,6 @@ export class AppComponent implements OnInit {
 			debugger;
 			console.log(res);
 		});
-		var s = document.createElement("script");
-		s.type = "text/javascript";
-		s.src = "https://telegram.org/js/telegram-widget.js?4";
-		s.async = true;
-		s.setAttribute('data-telegram-login', 'bestshedulebot');
-		s.setAttribute('data-size', 'large');
-		s.setAttribute('data-request-acess', 'write');
-		s.setAttribute('data-onauth', 'onAuth(user)');
-		this.elementRef.nativeElement.appendChild(s);
 	}
 
 	onTelegramAuth(user: any) {

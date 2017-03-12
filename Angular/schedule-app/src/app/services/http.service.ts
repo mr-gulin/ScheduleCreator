@@ -15,6 +15,6 @@ export class HttpService implements OnInit {
 	addBookWithObservable(): Observable<any> {
 		let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-		return this.http.post('//api/calc/users', {'head': 'head'}, {headers});
+		return this.http.post('http://agulin.com:8080/api/calc/users', {'head': 'head'}, {headers});
 	}
 }
