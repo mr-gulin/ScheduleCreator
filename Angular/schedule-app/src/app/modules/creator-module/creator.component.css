@@ -1,0 +1,62 @@
+.center {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    align-items: center;
+    color: #777;
+    margin-top: 15px;
+}
+
+.schedule-wrapper {
+    width: 96%;
+    margin-left: 2%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.add-card {
+    width: 100%;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.settings-component {
+    /*width: 100%;*/
+    margin-bottom: 15px;
+}
+
+.title {
+    width: 100%;
+}
+
+.weeks-wrapper {
+    width: 100%;
+}
+
+.pair-wrapper{
+    width: 90%;
+    margin-left: 5%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.pair-text{
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    line-height: 4;
+    margin-right: 10px;
+}
+
+.color-picker{
+    position: static!important;
+}
+
+@media screen and (max-width: 999px){
+    mat-form-field{
+        width: 100%;
+    }
+    .pair-wrapper{
+        justify-content: flex-start;
+    }
+}

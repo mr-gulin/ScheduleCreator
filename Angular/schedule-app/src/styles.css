@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+html, body{
+    background-color: #fafafa !important;
+}
+.flex-spacer {
+  flex: 1 1 auto;
+}
+.button-wrapper{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.full-width{
+  width: 100%;
+}
+
+.mat-button, .mat-raised-button {
+  border-radius: 0 !important;
+}

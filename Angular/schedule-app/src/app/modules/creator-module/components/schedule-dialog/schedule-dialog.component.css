@@ -1,0 +1,8 @@
+.wrapper{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.field-full-width{
+  width: 100%;
+}

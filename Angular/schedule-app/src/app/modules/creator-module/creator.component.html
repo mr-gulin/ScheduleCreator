@@ -1,0 +1,72 @@
+<div class="center" *ngIf="!schedule">Ни одного расписания не добавлено</div>
+<div class="schedule-wrapper" *ngIf="schedule">
+    <!--<settings class="settings-component" [isSecondWeekExists]="isSecondWeekExists" (dataChange)="changeSettings($event)"></settings>-->
+    <mat-card-title class="title">{{schedule.name}}</mat-card-title>
+    <mat-slide-toggle
+            color="primary"
+            (change)="changeSecondWeek($event)"
+            [checked]="isSecondWeekExists">
+        Включить деление на чётные/нечётные недели
+    </mat-slide-toggle>
+    <mat-form-field>
+        <mat-select placeholder="Количество учебных дней" (change)="adjustCountOfDays()" [(value)]="countOfWorkDays">
+            <mat-option *ngFor="let days of possibleCountOfWorkDays" [value]="days">
+                {{ days }} дней
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+        <div class="weeks-wrapper">
+            <div *ngFor="let week of schedule.weeks; let weekNum=index">
+                <mat-card class="add-card" *ngIf="schedule.weeks">
+                    <mat-card-title *ngIf="schedule.weeks.length>1">{{week.name}}</mat-card-title>
+                    <span class="flex-spacer"></span>
+                    <mat-card-content>
+                        <div *ngFor="let day of week.days; let dayNum=index">
+                            <mat-card-subtitle>
+                                {{day.name}}
+                                <mat-divider [inset]="true"></mat-divider>
+                            </mat-card-subtitle>
+                            <div *ngFor="let pair of day.pairs; let i=index;">
+                                <div class="pair-wrapper" *ngIf="pair.isEditMode">
+                                    <mat-form-field>
+                                        <input matInput [(ngModel)]="pair.name" #name{{weekNum}}{{dayNum}}{{i}}="ngModel"
+                                               name="name-{{weekNum}}-{{dayNum}}-{{i}}" [matAutocomplete]="auto"
+                                               placeholder="Название предмета"/>
+                                    </mat-form-field>
+
+                                    <mat-form-field>
+                                        <input matInput [(ngModel)]="pair.type" placeholder="Тип занятия"/>
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <input matInput [(ngModel)]="pair.classRoom" placeholder="Аудитория"/>
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <input matInput [(ngModel)]="pair.teacher" placeholder="Преподаватель"/>
+                                    </mat-form-field>
+                                    <div class="mat-mini-fab mat-accent color-picker" [colorPicker]="pair.color"
+                                         (colorPickerChange)="pair.color=$event"
+                                         [style.background]="pair.color"></div>
+                                    <mat-divider [inset]="true"></mat-divider>
+                                </div>
+                            </div>
+                            <button mat-button (click)="addPair(day, weekNum, dayNum)">
+                                <mat-icon>add</mat-icon>
+                                Добавить пару
+                            </button>
+                        </div>
+
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+</div>
+<floating-button *ngIf="!schedule" type="add" [action]="action"></floating-button>
+<floating-button *ngIf="schedule" type="submit" [action]="submit"></floating-button>
+<h4>Debug</h4>
+<p>Количество дней рабочик {{countOfWorkDays}}</p>
+<div *ngIf="schedule && schedule.weeks">
+    Недели
+    <div *ngFor="let week of schedule.weeks">
+        {{week.name}}
+    </div>
+</div>

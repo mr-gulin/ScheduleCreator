@@ -1,0 +1,12 @@
+<form #f="ngForm" class="wrapper">
+    <mat-card-title>Введите имя расписания</mat-card-title>
+    <mat-form-field class="full-width">
+        <input [required]="true" matInput placeholder="Название расписания" [(ngModel)]="data.name" #name="ngModel"
+               name="name"/>
+    </mat-form-field>
+    <div class="button-wrapper">
+        <button type="submit" mat-button (click)="save()">Ок</button>
+        <button mat-button (click)="onNoClick()">Отмена</button>
+    </div>
+
+</form>

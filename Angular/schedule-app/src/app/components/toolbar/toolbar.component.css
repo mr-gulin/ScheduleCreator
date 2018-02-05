@@ -1,0 +1,14 @@
+.title {
+    margin-right: 10px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.active {
+    border-bottom: 5px solid #fff;
+    font-weight: bold;
+}
+
+.button {
+    height: 100%;
+}
