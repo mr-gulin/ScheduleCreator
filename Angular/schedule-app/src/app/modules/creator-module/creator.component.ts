@@ -1,4 +1,4 @@
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, ViewChild} from '@angular/core';
 import {Schedule} from '@app/modules/creator-module/classes/schedule.class';
 import {MatDialog, MatDialogRef} from '@angular/material';
 import {ScheduleDialogComponent} from '@app/modules/creator-module/components/schedule-dialog/schedule-dialog.component';
@@ -9,6 +9,7 @@ import {Pair} from "@app/modules/creator-module/classes/pair.class";
 import {map, startWith} from "rxjs/operators";
 import {Observable} from "rxjs/Observable";
 import {FormArray, FormBuilder, FormControl, FormGroup, NgForm} from "@angular/forms";
+import {CreateNewAutocompleteGroup, NgAutocompleteComponent} from "ng-auto-complete";
 
 @Component({
 	selector: 'creator-component',
@@ -21,6 +22,9 @@ export class CreatorComponent {
 	public static DEFAULT_COUNT_OF_WORK_DAYS = 6;
 
 	@ViewChild('f') form: NgForm;
+
+	autoCompleteGroup: any[] = [];
+
 
 	title = 'app';
 	schedule: Schedule;
@@ -110,7 +114,7 @@ export class CreatorComponent {
 					this.schedule.weeks = this.schedule.weeks.slice(0, 1);
 				}
 			}
-			if (this.schedule.weeks.length === 0){
+			if (this.schedule.weeks.length === 0) {
 				this.addWeeks();
 			}
 		}
@@ -166,12 +170,65 @@ export class CreatorComponent {
 	}
 
 
-	addPair(day: Day, weeknum: any, daynum: any) {
+	addPair(day: Day, weeknum?: any, daynum?: any) {
 		const pair = new Pair();
-		if (day && day.pairs){
+		if (day && day.pairs) {
 			day.pairs.push(pair);
 
 		}
+	}
+
+	submitPair(f: NgForm, pair: Pair, day: Day) {
+		if (f.valid) {
+			pair.isEditMode = false;
+			let isAlreadyExists = false;
+			this.autoCompleteGroup.forEach((item: Pair) => {
+				if (item.name === pair.name) {
+					isAlreadyExists = true;
+				}
+			});
+			if (!isAlreadyExists) {
+				this.autoCompleteGroup.push(pair);
+			}
+			this.addPair(day);
+		}
+	}
+
+	editPair(pair: Pair) {
+		pair.isEditMode = true;
+	}
+
+	deletePair(weekNum: any, dayNum: any, pairNum: any) {
+
+		if (this.schedule && this.schedule.weeks && this.schedule.weeks[weekNum] &&
+			this.schedule.weeks[weekNum].days && this.schedule.weeks[weekNum].days[dayNum]) {
+
+			if (this.autoCompleteGroup) {
+				for (let i = 0; i < this.autoCompleteGroup.length; i++) {
+					if (this.autoCompleteGroup[i] && this.autoCompleteGroup[i].name === this.schedule.weeks[weekNum].days[dayNum].pairs[pairNum].name) {
+						this.autoCompleteGroup.splice(i, 1);
+					}
+				}
+			}
+			this.schedule.weeks[weekNum].days[dayNum].pairs.splice(pairNum, 1);
+		}
+	}
+
+	chooseExistingPair(data: any, weekNum: any, dayNum: any, pairNum: any) {
+		debugger;
+		let pair: Pair = new Pair();
+		const value = data && data.source && data.source.value;
+		this.autoCompleteGroup.forEach((item: Pair) => {
+			if (item.name === value) {
+				Object.assign(pair, item);
+			}
+		});
+		pair.isEditMode = true;
+		if (pair && this.schedule && this.schedule.weeks && this.schedule.weeks[weekNum] &&
+			this.schedule.weeks[weekNum].days && this.schedule.weeks[weekNum].days[dayNum]) {
+			this.schedule.weeks[weekNum].days[dayNum].pairs[pairNum] = pair;
+		}
+		console.log(data);
 	}
 
 	submit = () => {

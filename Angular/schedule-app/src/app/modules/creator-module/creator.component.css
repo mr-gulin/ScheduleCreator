@@ -35,11 +35,12 @@
 }
 
 .pair-wrapper{
-    width: 90%;
+    width: 85%;
     margin-left: 5%;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    margin-bottom: 15px;
 }
 
 .pair-text{
@@ -50,7 +51,30 @@
 
 .color-picker{
     position: static!important;
+    margin-left: 15px;
 }
+
+.all-pair-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.pair-item{
+    align-self: center;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.pair-item-title{
+    width: 100%;
+}
+
+.pair-item-content{
+    width: 100%;
+    font-weight: bold;
+}
+
 
 @media screen and (max-width: 999px){
     mat-form-field{
@@ -59,4 +83,31 @@
     .pair-wrapper{
         justify-content: flex-start;
     }
+    .submit-button{
+        width: 48%;
+    }
+
+    .pair-item{
+        align-self: center;
+        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .pair-item-title{
+        width: 48%;
+    }
+
+    .pair-item-content{
+        width: 48%;
+        font-weight: bold;
+    }
+
+    .color-picker{
+        margin-bottom: 10px;
+    }
+
+
 }

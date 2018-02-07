@@ -18,6 +18,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatDividerModule} from '@angular/material/divider';
 import {ColorPickerModule} from "angular2-color-picker/lib/color-picker.module";
 import {ReactiveFormsModule} from "@angular/forms";
+import {NgAutoCompleteModule} from "ng-auto-complete";
 
 
 
@@ -41,7 +42,8 @@ import {ReactiveFormsModule} from "@angular/forms";
 		MatDividerModule,
 		ColorPickerModule,
 		MatAutocompleteModule,
-		ReactiveFormsModule
+		ReactiveFormsModule,
+		NgAutoCompleteModule
 	],
 	exports: [
 		ToolbarComponent,
@@ -57,7 +59,8 @@ import {ReactiveFormsModule} from "@angular/forms";
 		MatDividerModule,
 		ColorPickerModule,
 		MatAutocompleteModule,
-		ReactiveFormsModule
+		ReactiveFormsModule,
+		NgAutoCompleteModule
 	],
 	providers: [],
 	bootstrap: []
