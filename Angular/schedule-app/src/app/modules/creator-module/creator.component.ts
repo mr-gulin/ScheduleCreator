@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
 import {Schedule} from '@app/modules/creator-module/classes/schedule.class';
 import {MatDialog, MatDialogRef} from '@angular/material';
 import {ScheduleDialogComponent} from '@app/modules/creator-module/components/schedule-dialog/schedule-dialog.component';
@@ -10,13 +10,15 @@ import {map, startWith} from "rxjs/operators";
 import {Observable} from "rxjs/Observable";
 import {FormArray, FormBuilder, FormControl, FormGroup, NgForm} from "@angular/forms";
 import {CreateNewAutocompleteGroup, NgAutocompleteComponent} from "ng-auto-complete";
+import {ScheduleService} from "@app/services/schedule.service";
+import {Router} from "@angular/router";
 
 @Component({
 	selector: 'creator-component',
 	templateUrl: './creator.component.html',
 	styleUrls: ['./creator.component.css']
 })
-export class CreatorComponent {
+export class CreatorComponent implements OnInit {
 	public static DEFAULT_ODD_WEEK_NAME = 'Нечётная неделя';
 	public static DEFAULT_EVEN_WEEK_NAME = 'Чётная неделя';
 	public static DEFAULT_COUNT_OF_WORK_DAYS = 6;
@@ -25,16 +27,10 @@ export class CreatorComponent {
 
 	autoCompleteGroup: any[] = [];
 
-
-	title = 'app';
 	schedule: Schedule;
-	isSecondWeekExists: boolean;
 	oddWeekName = CreatorComponent.DEFAULT_ODD_WEEK_NAME;
 	evenWeekName = CreatorComponent.DEFAULT_EVEN_WEEK_NAME;
-	countOfWorkDays = CreatorComponent.DEFAULT_COUNT_OF_WORK_DAYS;
-	filteredOptions: Observable<Pair[]>;
-	pairNameControl: FormControl = new FormControl();
-	public myForm: FormGroup;
+	isScheduleTitleEditable = false;
 
 	weekDays = [
 		{name: 'Понедельник', sysname: 0},
@@ -52,24 +48,11 @@ export class CreatorComponent {
 		7
 	];
 
-	constructor(private dialog: MatDialog, private fb: FormBuilder) {
-		this.isSecondWeekExists = false;
-
-
-	}
-
-	changeSettings(data: any) {
-		this.isSecondWeekExists = data && data.isSecondWeekExists;
-	}
-
-
-	filterSubjects(name: string, day: Day) {
-		return day.pairs.filter((pair: any) =>
-			pair.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+	constructor(private dialog: MatDialog, private fb: FormBuilder, private scheduleService: ScheduleService, private router: Router) {
 	}
 
 	addDaysToWeek(week: Week) {
-		for (let i = 0; i < this.countOfWorkDays; i++) {
+		for (let i = 0; i < this.schedule.countOfWorkDays; i++) {
 			const day = new Day();
 			day.name = this.weekDays[i].name;
 			day.sysname = this.weekDays[i].sysname;
@@ -82,11 +65,11 @@ export class CreatorComponent {
 			this.schedule.weeks.forEach((week: Week) => {
 				if (week.days) {
 					const countNow = week.days.length;
-					if (countNow > this.countOfWorkDays) {
-						week.days = week.days.slice(0, this.countOfWorkDays);
+					if (countNow > this.schedule.countOfWorkDays) {
+						week.days = week.days.slice(0, this.schedule.countOfWorkDays);
 					} else {
-						if (countNow < this.countOfWorkDays) {
-							for (let i = week.days.length; i < this.countOfWorkDays; i++) {
+						if (countNow < this.schedule.countOfWorkDays) {
+							for (let i = week.days.length; i < this.schedule.countOfWorkDays; i++) {
 								debugger;
 								const day = new Day();
 								day.name = this.weekDays[i].name;
@@ -102,7 +85,7 @@ export class CreatorComponent {
 
 	adjustCountOfWeeks() {
 		if (this.schedule && this.schedule.weeks) {
-			if (this.isSecondWeekExists) {
+			if (this.schedule.isSecondWeekExists) {
 				if (this.schedule.weeks.length < 2) {
 					const week = new Week();
 					week.name = this.evenWeekName;
@@ -130,7 +113,7 @@ export class CreatorComponent {
 		if (this.schedule) {
 			this.schedule.weeks = [];
 		}
-		if (this.isSecondWeekExists) {
+		if (this.schedule.isSecondWeekExists) {
 			this.schedule.weeks.push(week);
 			this.schedule.weeks.push(week2);
 		} else {
@@ -140,11 +123,19 @@ export class CreatorComponent {
 
 	changeSecondWeek(data: any) {
 		console.log("change data", data);
-		this.isSecondWeekExists = data.checked;
+		this.schedule.isSecondWeekExists = data.checked;
 		// this.dataChange.emit({isSecondWeekExists: data.checked});
 		this.adjustCountOfWeeks();
 
 
+	}
+
+	changeShowEmptyPairs(data: any){
+		this.schedule.isShowEmptyPairs = data.checked;
+	}
+
+	toggleEditScheduleName(){
+		this.isScheduleTitleEditable = !this.isScheduleTitleEditable;
 	}
 
 	addSchedule() {
@@ -164,6 +155,9 @@ export class CreatorComponent {
 		dialogRef.afterClosed().subscribe(result => {
 			console.log('The dialog was closed');
 			this.schedule = result;
+			this.schedule.isSecondWeekExists = false;
+			this.schedule.isShowEmptyPairs = true;
+			this.schedule.countOfWorkDays = CreatorComponent.DEFAULT_COUNT_OF_WORK_DAYS;
 			console.log('schedule', this.schedule);
 			this.addWeeks();
 		});
@@ -175,6 +169,18 @@ export class CreatorComponent {
 		if (day && day.pairs) {
 			day.pairs.push(pair);
 
+		}
+	}
+
+	addEmptyPair(day: Day, weeknum?: any, daynum?: any){
+		const pair = new Pair();
+		pair.isEditMode = false;
+		pair.type = 'EMPTY';
+		pair.name = '';
+		pair.color = '#fff';
+		pair.teacher = '';
+		if (day && day.pairs){
+			day.pairs.push(pair);
 		}
 	}
 
@@ -231,7 +237,12 @@ export class CreatorComponent {
 		console.log(data);
 	}
 
+	ngOnInit(){
+		this.action();
+	}
+
 	submit = () => {
-		alert("Yey");
+		let index = this.scheduleService.addSchedule(this.schedule);
+		this.router.navigate(['/browse']);
 	}
 }

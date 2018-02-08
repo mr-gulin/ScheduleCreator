@@ -8,6 +8,7 @@ import {Component} from '@angular/core';
 export class ToolbarComponent {
 	title = 'app';
 	buttons = [
-		{title: 'Create schedule', link: '/create'}
+		{title: 'Мои расписания', link: '/browse'},
+		{title: 'Новое расписание', link: '/create'}
 	];
 }

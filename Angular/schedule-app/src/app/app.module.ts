@@ -10,6 +10,7 @@ import {CommonComponentsModule} from '@app/components/common.module';
 import {CommonModule} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule} from '@angular/forms';
+import {CommonServicesModule} from "@app/services/common-services.module";
 
 
 @NgModule({
@@ -20,12 +21,14 @@ import {FormsModule} from '@angular/forms';
 		RouterModule,
 		BrowserModule,
 		FormsModule,
+		CommonModule,
 		BrowserAnimationsModule,
 		AppRoutingModuleModule,
 		CreatorModule,
-		CommonComponentsModule
+		CommonComponentsModule,
+		CommonServicesModule
 	],
-	exports: [],
+	exports: [CommonServicesModule],
 	providers: [RouterModule],
 	bootstrap: [AppComponent]
 })

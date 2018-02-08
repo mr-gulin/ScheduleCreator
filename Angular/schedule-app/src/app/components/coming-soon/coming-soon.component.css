@@ -1,0 +1,12 @@
+.coming-soon{
+    margin: 20px 20px 20px 20px;
+    color: #777;
+}
+.coming-soon-wrapper{
+    width: 100%;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}

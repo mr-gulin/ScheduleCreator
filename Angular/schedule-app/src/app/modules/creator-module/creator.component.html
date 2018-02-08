@@ -1,20 +1,52 @@
 <div class="center" *ngIf="!schedule">Ни одного расписания не добавлено</div>
 <div class="schedule-wrapper" *ngIf="schedule">
-    <!--<settings class="settings-component" [isSecondWeekExists]="isSecondWeekExists" (dataChange)="changeSettings($event)"></settings>-->
-    <mat-card-title class="title">{{schedule.name}}</mat-card-title>
-    <mat-slide-toggle
-            color="primary"
-            (change)="changeSecondWeek($event)"
-            [checked]="isSecondWeekExists">
-        Включить деление на чётные/нечётные недели
-    </mat-slide-toggle>
-    <mat-form-field>
-        <mat-select placeholder="Количество учебных дней" (change)="adjustCountOfDays()" [(value)]="countOfWorkDays">
-            <mat-option *ngFor="let days of possibleCountOfWorkDays" [value]="days">
-                {{ days }} дней
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
+    <mat-card class="add-card">
+        <!--<settings class="settings-component" [isSecondWeekExists]="isSecondWeekExists" (dataChange)="changeSettings($event)"></settings>-->
+        <div class="title-wrapper" *ngIf="!isScheduleTitleEditable">
+            <mat-card-title class="title">
+                {{schedule.name}}
+                <button color="primary" class="submit-button" mat-button (click)="toggleEditScheduleName()">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </mat-card-title>
+            <mat-divider [inset]="true"></mat-divider>
+        </div>
+        <div class="title-wrapper" *ngIf="isScheduleTitleEditable">
+            <mat-form-field>
+                <input matInput [(ngModel)]="schedule.name" placeholder="Название расписания"
+                       #scheduleName="ngModel"
+                       [required]="true"/>
+            </mat-form-field>
+            <button color="primary" class="submit-button" mat-button (click)="toggleEditScheduleName()">
+                <mat-icon>done</mat-icon>
+            </button>
+            <mat-divider [inset]="true"></mat-divider>
+        </div>
+        <div class="settings-wrapper">
+            <mat-slide-toggle class="settings-item"
+                              color="primary"
+                              (change)="changeSecondWeek($event)"
+                              [checked]="schedule.isSecondWeekExists">
+                Включить деление на чётные/нечётные недели
+            </mat-slide-toggle>
+
+            <mat-slide-toggle class="settings-item"
+                              color="primary"
+                              (change)="changeShowEmptyPairs($event)"
+                              [checked]="schedule.isShowEmptyPairs">
+                Показывать пустые пары
+            </mat-slide-toggle>
+
+            <mat-form-field class="settings-item">
+                <mat-select placeholder="Количество учебных дней" (change)="adjustCountOfDays()"
+                            [(value)]="schedule.countOfWorkDays">
+                    <mat-option *ngFor="let days of possibleCountOfWorkDays" [value]="days">
+                        {{ days }} дней
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </mat-card>
     <div class="weeks-wrapper">
         <div *ngFor="let week of schedule.weeks; let weekNum=index">
             <mat-card class="add-card" *ngIf="schedule.weeks">
@@ -27,17 +59,19 @@
                             <mat-divider [inset]="true"></mat-divider>
                         </mat-card-subtitle>
                         <div *ngFor="let pair of day.pairs; let i=index;" class="all-pair-wrapper">
-                            <div *ngIf="pair.isEditMode" class="mat-mini-fab mat-accent color-picker" [colorPicker]="pair.color"
+                            <div *ngIf="pair.isEditMode" class="mat-mini-fab mat-accent color-picker"
+                                 [colorPicker]="pair.color"
                                  (colorPickerChange)="pair.color=$event"
                                  [style.background]="pair.color"
                                  [cpPosition]="'bottom'"></div>
-                            <div *ngIf="!pair.isEditMode" class="mat-mini-fab mat-accent color-picker" [style.background]="pair.color"></div>
+                            <div *ngIf="!pair.isEditMode" class="mat-mini-fab mat-accent color-picker"
+                                 [style.background]="pair.color"></div>
                             <form #f="ngForm" class="pair-wrapper" *ngIf="pair.isEditMode">
                                 <mat-form-field>
                                     <input matInput [(ngModel)]="pair.name" #name{{weekNum}}{{dayNum}}{{i}}="ngModel"
                                            name="name-{{weekNum}}-{{dayNum}}-{{i}}" [matAutocomplete]="auto"
                                            placeholder="Название предмета"
-                                            [required]="true"/>
+                                           [required]="true"/>
                                     <mat-autocomplete #auto="matAutocomplete">
                                         <mat-option *ngFor="let option of autoCompleteGroup" [value]="option.name"
                                                     (onSelectionChange)="chooseExistingPair($event, weekNum, dayNum, i)">
@@ -46,26 +80,31 @@
                                     </mat-autocomplete>
                                 </mat-form-field>
                                 <mat-form-field>
-                                    <input matInput [(ngModel)]="pair.type" placeholder="Тип занятия" #type{{weekNum}}{{dayNum}}{{i}}="ngModel"
-                                           name="type-{{weekNum}}-{{dayNum}}-{{i}}"  [required]="true"/>
+                                    <input matInput [(ngModel)]="pair.type" placeholder="Тип занятия"
+                                           #type{{weekNum}}{{dayNum}}{{i}}="ngModel"
+                                           name="type-{{weekNum}}-{{dayNum}}-{{i}}" [required]="true"/>
                                 </mat-form-field>
                                 <mat-form-field>
-                                    <input matInput [(ngModel)]="pair.classRoom" placeholder="Аудитория" #classRoom{{weekNum}}{{dayNum}}{{i}}="ngModel"
-                                           name="classRoom-{{weekNum}}-{{dayNum}}-{{i}}"  [required]="true"/>
+                                    <input matInput [(ngModel)]="pair.classRoom" placeholder="Аудитория"
+                                           #classRoom{{weekNum}}{{dayNum}}{{i}}="ngModel"
+                                           name="classRoom-{{weekNum}}-{{dayNum}}-{{i}}" [required]="true"/>
                                 </mat-form-field>
                                 <mat-form-field>
-                                    <input matInput [(ngModel)]="pair.teacher" placeholder="Преподаватель" #teacher{{weekNum}}{{dayNum}}{{i}}="ngModel"
-                                           name="teacher-{{weekNum}}-{{dayNum}}-{{i}}"  [required]="true"/>
+                                    <input matInput [(ngModel)]="pair.teacher" placeholder="Преподаватель"
+                                           #teacher{{weekNum}}{{dayNum}}{{i}}="ngModel"
+                                           name="teacher-{{weekNum}}-{{dayNum}}-{{i}}" [required]="true"/>
                                 </mat-form-field>
-                                <button *ngIf="pair.isEditMode" color="primary" class="submit-button" mat-button (click)="submitPair(f, pair, day)">
+                                <button *ngIf="pair.isEditMode" color="primary" class="submit-button" mat-button
+                                        (click)="submitPair(f, pair, day)">
                                     <mat-icon>done</mat-icon>
                                 </button>
-                                <button *ngIf="pair.isEditMode" color="primary" class="submit-button" mat-button (click)="deletePair(weekNum, dayNum, i)">
+                                <button *ngIf="pair.isEditMode" color="primary" class="submit-button" mat-button
+                                        (click)="deletePair(weekNum, dayNum, i)">
                                     <mat-icon>delete</mat-icon>
                                 </button>
                                 <mat-divider [inset]="true"></mat-divider>
                             </form>
-                            <div class="pair-wrapper" *ngIf="!pair.isEditMode">
+                            <div class="pair-wrapper" *ngIf="!pair.isEditMode && !(pair.type==='EMPTY')">
                                 <div class="pair-item">
                                     <div class="pair-item-title">Название:</div>
                                     <div class="pair-item-content">{{pair.name}}</div>
@@ -87,10 +126,25 @@
                                 </button>
                                 <mat-divider [inset]="true"></mat-divider>
                             </div>
+                            <div class="pair-wrapper" *ngIf="!pair.isEditMode && (pair.type==='EMPTY')">
+                                <div class="pair-item">
+                                    <div class="pair-item-title">Тип:</div>
+                                    <div class="pair-item-content">окно</div>
+                                </div>
+                                <button *ngIf="!pair.isEditMode" color="primary" class="submit-button" mat-button
+                                        (click)="deletePair(weekNum, dayNum, i)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                                <mat-divider [inset]="true"></mat-divider>
+                            </div>
                         </div>
                         <button mat-button (click)="addPair(day, weekNum, dayNum)">
                             <mat-icon>add</mat-icon>
                             Добавить пару
+                        </button>
+                        <button mat-button (click)="addEmptyPair(day, weekNum, dayNum)">
+                            <mat-icon>add_to_queue</mat-icon>
+                            Добавить окно
                         </button>
                     </div>
 
@@ -99,14 +153,13 @@
         </div>
     </div>
 </div>
-<floating-button *ngIf="!schedule" type="add" [action]="action"></floating-button>
 <floating-button *ngIf="schedule" type="submit" [action]="submit"></floating-button>
-<h4>Debug</h4>
-<p>Количество дней рабочик {{countOfWorkDays}}</p>
-<div *ngIf="schedule && schedule.weeks">
-    Недели
-    <div *ngFor="let week of schedule.weeks">
-        {{week.name}}
-    </div>
-</div>
-<ng-autocomplete (selected)="selectExisting($event)" [classes]="['']" [group]="group"></ng-autocomplete>
+<!--<h4>Debug</h4>-->
+<!--<p>Количество дней рабочик {{countOfWorkDays}}</p>-->
+<!--<div *ngIf="schedule && schedule.weeks">-->
+<!--Недели-->
+<!--<div *ngFor="let week of schedule.weeks">-->
+<!--{{week.name}}-->
+<!--</div>-->
+<!--</div>-->
+<!--<ng-autocomplete (selected)="selectExisting($event)" [classes]="['']" [group]="group"></ng-autocomplete>-->

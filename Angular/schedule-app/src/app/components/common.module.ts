@@ -19,6 +19,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import {ColorPickerModule} from "angular2-color-picker/lib/color-picker.module";
 import {ReactiveFormsModule} from "@angular/forms";
 import {NgAutoCompleteModule} from "ng-auto-complete";
+import {ComingSoonComponent} from "@app/components/coming-soon/coming-soon.component";
 
 
 
@@ -26,12 +27,13 @@ import {NgAutoCompleteModule} from "ng-auto-complete";
 	declarations: [
 		ToolbarComponent,
 		FloatingButtonComponent,
-		SettingsComponent
+		SettingsComponent,
+		ComingSoonComponent
 	],
 	imports: [
 		RouterModule,
-		CommonModule,
 		MatToolbarModule,
+		CommonModule,
 		MatButtonModule,
 		MatCardModule,
 		MatDialogModule,
@@ -60,7 +62,8 @@ import {NgAutoCompleteModule} from "ng-auto-complete";
 		ColorPickerModule,
 		MatAutocompleteModule,
 		ReactiveFormsModule,
-		NgAutoCompleteModule
+		NgAutoCompleteModule,
+		ComingSoonComponent
 	],
 	providers: [],
 	bootstrap: []

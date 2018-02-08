@@ -1,0 +1,7 @@
+<div *ngIf="scheduleService">
+    <div *ngFor="let schedule of scheduleService.schedules">
+        <div *ngIf="schedule">
+            {{schedule.name}}
+        </div>
+    </div>
+</div>
