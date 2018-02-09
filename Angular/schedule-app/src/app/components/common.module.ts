@@ -23,6 +23,7 @@ import {ComingSoonComponent} from "@app/components/coming-soon/coming-soon.compo
 
 
 
+
 @NgModule({
 	declarations: [
 		ToolbarComponent,
@@ -45,7 +46,7 @@ import {ComingSoonComponent} from "@app/components/coming-soon/coming-soon.compo
 		ColorPickerModule,
 		MatAutocompleteModule,
 		ReactiveFormsModule,
-		NgAutoCompleteModule
+		NgAutoCompleteModule,
 	],
 	exports: [
 		ToolbarComponent,
@@ -63,7 +64,7 @@ import {ComingSoonComponent} from "@app/components/coming-soon/coming-soon.compo
 		MatAutocompleteModule,
 		ReactiveFormsModule,
 		NgAutoCompleteModule,
-		ComingSoonComponent
+		ComingSoonComponent,
 	],
 	providers: [],
 	bootstrap: []

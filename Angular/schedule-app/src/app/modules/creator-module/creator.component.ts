@@ -149,7 +149,8 @@ export class CreatorComponent implements OnInit {
 	openDialog(): void {
 		const dialogRef = this.dialog.open(ScheduleDialogComponent, {
 			width: '500px',
-			data: {name: '', weeks: []}
+			data: {name: '', weeks: []},
+			disableClose: true
 		});
 
 		dialogRef.afterClosed().subscribe(result => {
@@ -158,6 +159,7 @@ export class CreatorComponent implements OnInit {
 			this.schedule.isSecondWeekExists = false;
 			this.schedule.isShowEmptyPairs = true;
 			this.schedule.countOfWorkDays = CreatorComponent.DEFAULT_COUNT_OF_WORK_DAYS;
+			this.schedule.createDate = new Date();
 			console.log('schedule', this.schedule);
 			this.addWeeks();
 		});
@@ -175,7 +177,8 @@ export class CreatorComponent implements OnInit {
 	addEmptyPair(day: Day, weeknum?: any, daynum?: any){
 		const pair = new Pair();
 		pair.isEditMode = false;
-		pair.type = 'EMPTY';
+		pair.systemType = 'EMPTY';
+		pair.type = '';
 		pair.name = '';
 		pair.color = '#fff';
 		pair.teacher = '';
@@ -196,7 +199,7 @@ export class CreatorComponent implements OnInit {
 			if (!isAlreadyExists) {
 				this.autoCompleteGroup.push(pair);
 			}
-			this.addPair(day);
+			// this.addPair(day);
 		}
 	}
 

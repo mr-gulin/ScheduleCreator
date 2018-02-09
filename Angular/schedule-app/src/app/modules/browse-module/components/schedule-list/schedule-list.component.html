@@ -1,7 +1,12 @@
 <div *ngIf="scheduleService">
-    <div *ngFor="let schedule of scheduleService.schedules">
-        <div *ngIf="schedule">
+    <div class="center" *ngIf="scheduleService && scheduleService.schedules && scheduleService.schedules.length === 0">Ни одного расписания не добавлено</div>
+    <mat-card class="schedule-card "*ngFor="let schedule of scheduleService.schedules; let scheduleNum=index" (click)="openSchedule(scheduleNum)">
+        <mat-card-title class="full-width" *ngIf="schedule.name">
             {{schedule.name}}
-        </div>
-    </div>
+        </mat-card-title>
+        <mat-divider [inset]="true"></mat-divider>
+        <mat-card-content>
+            <div>Дата создания: {{schedule.createDate | date}}</div>
+        </mat-card-content>
+    </mat-card>
 </div>

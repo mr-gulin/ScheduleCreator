@@ -4,11 +4,13 @@ import {CreatorComponent} from '@app/modules/creator-module/creator.component';
 import {CommonComponentsModule} from '@app/components/common.module';
 import {ComingSoonComponent} from "@app/components/coming-soon/coming-soon.component";
 import {ScheduleListComponent} from "@app/modules/browse-module/components/schedule-list/schedule-list.component";
+import {ScheduleViewComponent} from "@app/modules/browse-module/components/schedule-view/schedule-view.component";
 
 const appRoutes: Routes = [
 	// {path: '', component: CreatorComponent},
 	// {path: '**', component: ComingSoonComponent},
 	{path: 'list', component: ScheduleListComponent},
+	{path: 'viewSchedule', component: ScheduleViewComponent},
 	{
 		path: '',
 		redirectTo: 'list',

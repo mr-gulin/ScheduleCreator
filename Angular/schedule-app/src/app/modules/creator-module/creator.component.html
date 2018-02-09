@@ -1,4 +1,3 @@
-<div class="center" *ngIf="!schedule">Ни одного расписания не добавлено</div>
 <div class="schedule-wrapper" *ngIf="schedule">
     <mat-card class="add-card">
         <!--<settings class="settings-component" [isSecondWeekExists]="isSecondWeekExists" (dataChange)="changeSettings($event)"></settings>-->
@@ -104,7 +103,7 @@
                                 </button>
                                 <mat-divider [inset]="true"></mat-divider>
                             </form>
-                            <div class="pair-wrapper" *ngIf="!pair.isEditMode && !(pair.type==='EMPTY')">
+                            <div class="pair-wrapper" *ngIf="!pair.isEditMode && !(pair.systemType==='EMPTY')">
                                 <div class="pair-item">
                                     <div class="pair-item-title">Название:</div>
                                     <div class="pair-item-content">{{pair.name}}</div>
@@ -126,7 +125,7 @@
                                 </button>
                                 <mat-divider [inset]="true"></mat-divider>
                             </div>
-                            <div class="pair-wrapper" *ngIf="!pair.isEditMode && (pair.type==='EMPTY')">
+                            <div class="pair-wrapper" *ngIf="!pair.isEditMode && (pair.systemType==='EMPTY')">
                                 <div class="pair-item">
                                     <div class="pair-item-title">Тип:</div>
                                     <div class="pair-item-content">окно</div>

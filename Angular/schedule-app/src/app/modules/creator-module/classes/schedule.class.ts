@@ -6,6 +6,7 @@ export class Schedule {
 	private _countOfWorkDays: number;
 	private _isSecondWeekExists: boolean;
 	private _isShowEmptyPairs: boolean;
+	private _createDate: any;
 
 	constructor(data?: any) {
 		this._weeks = data || [];
@@ -49,5 +50,13 @@ export class Schedule {
 
 	set isShowEmptyPairs(value: boolean) {
 		this._isShowEmptyPairs = value;
+	}
+
+	get createDate(): any {
+		return this._createDate;
+	}
+
+	set createDate(value: any) {
+		this._createDate = value;
 	}
 }

@@ -1,0 +1,31 @@
+Страница просмотра расписания
+<!--<pre *ngIf="schedule">{{schedule | json}}</pre>-->
+<div class="schedule-wrapper" *ngIf="schedule">
+    <div class="schedule-title">{{schedule.name}}</div>
+    <div class="weeks-wrapper">
+        <div class="week" [ngClass]="{'week-one': !schedule.isSecondWeekExists}" *ngFor="let week of schedule.weeks">
+            <div class="week-name" *ngIf="schedule.isSecondWeekExists">{{week.name}}</div>
+        </div>
+    </div>
+    <div class="days-wrapper" *ngIf="scheduleView">
+        <div class="day" *ngFor="let day of scheduleView">
+            <div class="day" *ngIf="!isEmpty(day)">
+                <div class="day-name">{{day.name}}</div>
+                <div class="weeks-wrapper">
+                        <table class="week" [ngClass]="{'week-one': !schedule.isSecondWeekExists}" border="1" *ngFor="let week of day.weeks">
+
+                            <tr [style.background]="pair.color" class="pairs-wrapper" [hidden]="!isShowPair(pair)" *ngFor="let pair of week.pairs; let pairNum=index">
+                                <!--<tr class="pair">-->
+                                    <td class="pair-item number">{{pairNum+1}}</td>
+                                    <td class="pair-item">{{pair.type}}</td>
+                                    <td class="pair-item">{{pair.name}}</td>
+                                    <td class="pair-item">{{pair.teacher}}</td>
+                                    <td class="pair-item">{{pair.classRoom}}</td>
+                                <!--</tr>-->
+                            </tr>
+                        </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

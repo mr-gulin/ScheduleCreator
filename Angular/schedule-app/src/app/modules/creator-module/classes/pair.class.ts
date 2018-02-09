@@ -8,6 +8,7 @@ export class Pair {
 	private _teacher: string;
 	private _color: string;
 	private _isEditMode: boolean = true;
+	private _systemType: string;
 
 	constructor(data?: any) {
 		if (data) {
@@ -74,5 +75,13 @@ export class Pair {
 
 	set isEditMode(value: boolean) {
 		this._isEditMode = value;
+	}
+
+	get systemType(): string {
+		return this._systemType;
+	}
+
+	set systemType(value: string) {
+		this._systemType = value;
 	}
 }
