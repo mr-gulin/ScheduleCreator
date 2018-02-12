@@ -8,12 +8,15 @@ import {ScheduleDialogComponent} from '@app/modules/creator-module/components/sc
 import {FormsModule} from '@angular/forms';
 import {CommonDirectivesModule} from "@app/directives/common-directives.module";
 import {ScheduleService} from "@app/services/schedule.service";
+import {InfoDialogComponent} from "@app/modules/creator-module/components/info-dialog/info-dialog.component";
+import {CookieService} from "ngx-cookie-service";
 
 
 @NgModule({
 	declarations: [
 		CreatorComponent,
-		ScheduleDialogComponent
+		ScheduleDialogComponent,
+		InfoDialogComponent
 	],
 	imports: [
 		CommonModule,
@@ -22,8 +25,8 @@ import {ScheduleService} from "@app/services/schedule.service";
 		CreatorRoutingModuleModule,
 		CommonDirectivesModule
 	],
-	providers: [],
-	entryComponents: [ScheduleDialogComponent]
+	providers: [CookieService],
+	entryComponents: [ScheduleDialogComponent, InfoDialogComponent]
 })
 export class CreatorModule {
 }

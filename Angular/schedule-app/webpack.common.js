@@ -94,7 +94,7 @@ module.exports = {
 
         new HtmlWebpackPlugin({
             template: 'src/index.html',
-            //favicon: 'src/assets/i/favicon-16.ico',
+            favicon: 'src/favicon.ico',
             hash: true
         }),
 

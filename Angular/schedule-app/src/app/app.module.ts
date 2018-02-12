@@ -11,6 +11,7 @@ import {CommonModule} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule} from '@angular/forms';
 import {CommonServicesModule} from "@app/services/common-services.module";
+import { CookieService } from 'ngx-cookie-service';
 
 
 @NgModule({
@@ -29,7 +30,7 @@ import {CommonServicesModule} from "@app/services/common-services.module";
 		CommonServicesModule
 	],
 	exports: [CommonServicesModule],
-	providers: [RouterModule],
+	providers: [RouterModule, CookieService],
 	bootstrap: [AppComponent]
 })
 export class AppModule {

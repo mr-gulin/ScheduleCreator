@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, HostListener, Input, OnInit, ViewChild} from '@angular/core';
 import {Schedule} from '@app/modules/creator-module/classes/schedule.class';
 import {MatDialog, MatDialogRef} from '@angular/material';
 import {ScheduleDialogComponent} from '@app/modules/creator-module/components/schedule-dialog/schedule-dialog.component';
@@ -12,6 +12,8 @@ import {FormArray, FormBuilder, FormControl, FormGroup, NgForm} from "@angular/f
 import {CreateNewAutocompleteGroup, NgAutocompleteComponent} from "ng-auto-complete";
 import {ScheduleService} from "@app/services/schedule.service";
 import {Router} from "@angular/router";
+import {InfoDialogComponent} from "@app/modules/creator-module/components/info-dialog/info-dialog.component";
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
 	selector: 'creator-component',
@@ -31,6 +33,7 @@ export class CreatorComponent implements OnInit {
 	oddWeekName = CreatorComponent.DEFAULT_ODD_WEEK_NAME;
 	evenWeekName = CreatorComponent.DEFAULT_EVEN_WEEK_NAME;
 	isScheduleTitleEditable = false;
+	isScheduleInit = false;
 
 	weekDays = [
 		{name: 'Понедельник', sysname: 0},
@@ -48,7 +51,34 @@ export class CreatorComponent implements OnInit {
 		7
 	];
 
-	constructor(private dialog: MatDialog, private fb: FormBuilder, private scheduleService: ScheduleService, private router: Router) {
+	@HostListener('window:keypress', ['$event'])
+	keyPress(event: KeyboardEvent) {
+		if (!this.isScheduleInit) {
+			if (event.shiftKey && event.keyCode == 78) {
+				const dayNum = -1;
+				let week: Week;
+				if (this.schedule && this.schedule.weeks) {
+					week = this.schedule.weeks[0];
+					if (week) {
+						this.switchToNewDay(null, dayNum, week, null, this.form, false);
+					}
+				}
+			}
+			if (event.shiftKey && event.keyCode == 69) {
+				const dayNum = -1;
+				let week: Week;
+				if (this.schedule && this.schedule.weeks) {
+					week = this.schedule.weeks[0];
+					if (week) {
+						this.switchToNewDay(null, dayNum, week, null, this.form, true);
+					}
+				}
+			}
+		}
+		this.isScheduleInit = true;
+	}
+
+	constructor(private dialog: MatDialog, private fb: FormBuilder, private scheduleService: ScheduleService, private router: Router, private cookieService: CookieService) {
 	}
 
 	addDaysToWeek(week: Week) {
@@ -89,6 +119,7 @@ export class CreatorComponent implements OnInit {
 				if (this.schedule.weeks.length < 2) {
 					const week = new Week();
 					week.name = this.evenWeekName;
+					week.number = 2;
 					this.addDaysToWeek(week);
 					this.schedule.weeks.push(week);
 				}
@@ -106,8 +137,10 @@ export class CreatorComponent implements OnInit {
 	addWeeks() {
 		const week = new Week();
 		week.name = this.oddWeekName;
+		week.number = 1;
 		const week2 = new Week();
 		week2.name = this.evenWeekName;
+		week2.number = 2;
 		this.addDaysToWeek(week);
 		this.addDaysToWeek(week2);
 		if (this.schedule) {
@@ -130,11 +163,11 @@ export class CreatorComponent implements OnInit {
 
 	}
 
-	changeShowEmptyPairs(data: any){
+	changeShowEmptyPairs(data: any) {
 		this.schedule.isShowEmptyPairs = data.checked;
 	}
 
-	toggleEditScheduleName(){
+	toggleEditScheduleName() {
 		this.isScheduleTitleEditable = !this.isScheduleTitleEditable;
 	}
 
@@ -147,21 +180,39 @@ export class CreatorComponent implements OnInit {
 	};
 
 	openDialog(): void {
-		const dialogRef = this.dialog.open(ScheduleDialogComponent, {
-			width: '500px',
-			data: {name: '', weeks: []},
-			disableClose: true
+		setTimeout(() => {
+			const dialogRef = this.dialog.open(ScheduleDialogComponent, {
+				width: '500px',
+				data: {name: '', weeks: []},
+				disableClose: true
+			});
+			dialogRef.afterClosed().subscribe(result => {
+				console.log('The dialog was closed');
+				this.schedule = result;
+				this.schedule.isSecondWeekExists = false;
+				this.schedule.isShowEmptyPairs = true;
+				this.schedule.countOfWorkDays = CreatorComponent.DEFAULT_COUNT_OF_WORK_DAYS;
+				this.schedule.createDate = new Date();
+				console.log('schedule', this.schedule);
+				this.addWeeks();
+				this.openInfoDialog();
+			});
 		});
 
-		dialogRef.afterClosed().subscribe(result => {
-			console.log('The dialog was closed');
-			this.schedule = result;
-			this.schedule.isSecondWeekExists = false;
-			this.schedule.isShowEmptyPairs = true;
-			this.schedule.countOfWorkDays = CreatorComponent.DEFAULT_COUNT_OF_WORK_DAYS;
-			this.schedule.createDate = new Date();
-			console.log('schedule', this.schedule);
-			this.addWeeks();
+
+	}
+
+	openInfoDialog(): void {
+		setTimeout(() => {
+			if (this.cookieService.get('ISINFOADDDIALOGSHOWED') !== 'true') {
+				const dialogRef = this.dialog.open(InfoDialogComponent, {
+					width: '500px',
+					disableClose: true
+				});
+				dialogRef.afterClosed().subscribe(result => {
+					this.cookieService.set('ISINFOADDDIALOGSHOWED', 'true');//put('ISINFOADDDIALOGSHOWED', "true");
+				});
+			}
 		});
 	}
 
@@ -174,7 +225,7 @@ export class CreatorComponent implements OnInit {
 		}
 	}
 
-	addEmptyPair(day: Day, weeknum?: any, daynum?: any){
+	addEmptyPair = (day: Day, weeknum?: any, daynum?: any) => {
 		const pair = new Pair();
 		pair.isEditMode = false;
 		pair.systemType = 'EMPTY';
@@ -182,8 +233,9 @@ export class CreatorComponent implements OnInit {
 		pair.name = '';
 		pair.color = '#fff';
 		pair.teacher = '';
-		if (day && day.pairs){
+		if (day && day.pairs) {
 			day.pairs.push(pair);
+			this.addPair(day);
 		}
 	}
 
@@ -240,12 +292,43 @@ export class CreatorComponent implements OnInit {
 		console.log(data);
 	}
 
-	ngOnInit(){
+	ngOnInit() {
 		this.action();
 	}
 
 	submit = () => {
 		let index = this.scheduleService.addSchedule(this.schedule);
 		this.router.navigate(['/browse']);
+	};
+
+	switchToNewDay(event: any, dayNum: number, week: Week, pair: Pair, f: NgForm, isEmpty: boolean) {
+		let add = this.addPair;
+		if (isEmpty) {
+			add = this.addEmptyPair;
+		}
+		if (f && f.valid) {
+			if (pair) {
+				pair.isEditMode = false;
+			}
+		}
+		if ((f && f.valid) || !f) {
+			// Берем week(dayNum+1), если переполнилось, значит берем следующую неделю, если закончилось сохраняем
+			let day: Day;
+			dayNum = dayNum + 1;
+			if ((dayNum + 1) > this.schedule.countOfWorkDays && this.schedule.isSecondWeekExists && week.number !== 2) {
+				dayNum = 0;
+				week = this.schedule.weeks[1];
+				day = week && week.days[dayNum];
+				add(day);
+			} else if ((dayNum + 1) <= this.schedule.countOfWorkDays) {
+				day = week && week.days[dayNum];
+				add(day);
+			}
+		}
+	}
+
+	submitAndAddNewPair(f: NgForm, day: Day, pair: Pair){
+		this.submitPair(f, pair, day);
+		this.addPair(day);
 	}
 }

@@ -67,7 +67,7 @@
                                  [style.background]="pair.color"></div>
                             <form #f="ngForm" class="pair-wrapper" *ngIf="pair.isEditMode">
                                 <mat-form-field>
-                                    <input matInput [(ngModel)]="pair.name" #name{{weekNum}}{{dayNum}}{{i}}="ngModel"
+                                    <input matInput focusFirst [(ngModel)]="pair.name" #name{{weekNum}}{{dayNum}}{{i}}="ngModel"
                                            name="name-{{weekNum}}-{{dayNum}}-{{i}}" [matAutocomplete]="auto"
                                            placeholder="Название предмета"
                                            [required]="true"/>
@@ -89,7 +89,12 @@
                                            name="classRoom-{{weekNum}}-{{dayNum}}-{{i}}" [required]="true"/>
                                 </mat-form-field>
                                 <mat-form-field>
-                                    <input matInput [(ngModel)]="pair.teacher" placeholder="Преподаватель"
+                                    <input matInput hotkeyListener
+                                           (ctrlEnter)="switchToNewDay($event, dayNum, week, pair, f, false)"
+                                           (ctrlShiftEnter)="switchToNewDay($event, dayNum, week, pair, f, true)"
+                                           (shiftEnter)="addEmptyPair(day)"
+                                           (enter)="submitAndAddNewPair(f, day, pair)"
+                                           [(ngModel)]="pair.teacher" placeholder="Преподаватель"
                                            #teacher{{weekNum}}{{dayNum}}{{i}}="ngModel"
                                            name="teacher-{{weekNum}}-{{dayNum}}-{{i}}" [required]="true"/>
                                 </mat-form-field>

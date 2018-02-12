@@ -1,6 +1,7 @@
 import {Day} from '@app/modules/creator-module/classes/day.class';
 
 export class Week {
+	private _number: number;
 	private _name: string;
 	private _days: Day[];
 
@@ -22,5 +23,13 @@ export class Week {
 
 	set name(value: string) {
 		this._name = value;
+	}
+
+	get number(): number {
+		return this._number;
+	}
+
+	set number(value: number) {
+		this._number = value;
 	}
 }
