@@ -1,0 +1,7 @@
+.transparent {
+
+    background-color: #ffffff6e !important;
+    position: fixed !important;
+    z-index: 9;
+    width: 100%;
+}

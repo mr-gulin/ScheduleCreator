@@ -15,8 +15,7 @@ const appRoutes: Routes = [
 	},
 	{
 		path: '',
-		component: ComingSoonComponent,
-		redirectTo: '',
+		loadChildren: '@app/modules/welcome-module/welcome.module#WelcomeModule',
 		pathMatch: 'full'
 	}
 ];

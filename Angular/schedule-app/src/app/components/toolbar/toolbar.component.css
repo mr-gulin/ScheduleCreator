@@ -5,10 +5,16 @@
 }
 
 .active {
-    border-bottom: 5px solid #fff;
+    border-bottom: 5px solid #673ab7;
     font-weight: bold;
 }
 
 .button {
     height: 100%;
+}
+
+.mat-toolbar.mat-primary{
+    background: #d6d8d500;
+    color: #000;
+    box-shadow: 0px 2px 15px 1px #ccc;
 }

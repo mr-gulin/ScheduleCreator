@@ -25,4 +25,8 @@ export class ScheduleListComponent implements OnInit {
 	openSchedule(scheduleNum: number){
 		this.router.navigate(['/browse/viewSchedule'], { queryParams: { scheduleNum: scheduleNum } });
 	}
+
+	addNewSchedule = () => {
+		this.router.navigate(['/create']);
+	}
 }

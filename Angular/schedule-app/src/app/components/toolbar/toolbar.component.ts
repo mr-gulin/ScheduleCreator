@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {RootScopeService} from "@app/services/root-scope.service";
 
 @Component({
 	selector: 'toolbar-app',
@@ -11,4 +12,12 @@ export class ToolbarComponent {
 		{title: 'Мои расписания', link: '/browse'},
 		{title: 'Новое расписание', link: '/create'}
 	];
+
+	constructor(private rootScope: RootScopeService){
+
+	}
+
+	onHomeClick(){
+		this.rootScope.isShowToolbar = false;
+	}
 }

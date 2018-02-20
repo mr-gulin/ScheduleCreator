@@ -1,6 +1,6 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <button mat-button class="title" routerLink="/">Schedule creator</button>
+    <button mat-button style="height: 100%; font-size: 16px;" class="title" routerLink="/" (click)="onHomeClick()">Schedule creator</button>
     <div class="button" *ngFor="let button of buttons">
         <button style="height: 100%; font-size: 16px;" mat-button routerLink="{{button.link}}" routerLinkActive="active">{{button.title}}</button>
     </div>

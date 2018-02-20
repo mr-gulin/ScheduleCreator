@@ -12,6 +12,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule} from '@angular/forms';
 import {CommonServicesModule} from "@app/services/common-services.module";
 import { CookieService } from 'ngx-cookie-service';
+import {WelcomeModule} from "@app/modules/welcome-module/welcome.module";
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { CookieService } from 'ngx-cookie-service';
 		AppRoutingModuleModule,
 		CreatorModule,
 		CommonComponentsModule,
-		CommonServicesModule
+		CommonServicesModule,
+		WelcomeModule
 	],
 	exports: [CommonServicesModule],
 	providers: [RouterModule, CookieService],
