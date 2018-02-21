@@ -4,7 +4,7 @@ import {Schedule} from "@app/modules/creator-module/classes/schedule.class";
 @Injectable()
 export class RootScopeService implements OnInit {
 
-	private _isShowToolbar: boolean;
+	private _isShowToolbar: boolean = true;
 
 	ngOnInit(): void {
 	}

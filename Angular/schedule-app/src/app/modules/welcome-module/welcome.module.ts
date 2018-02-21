@@ -12,6 +12,7 @@ import {InfoDialogComponent} from "@app/modules/creator-module/components/info-d
 import {CookieService} from "ngx-cookie-service";
 import {WelcomeRoutingModule} from "@app/modules/welcome-module/welcome-routing.module";
 import {WelcomeComponent} from "@app/modules/welcome-module/welcome.component";
+import {RouterModule} from "@angular/router";
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import {WelcomeComponent} from "@app/modules/welcome-module/welcome.component";
 		WelcomeComponent
 	],
 	imports: [
+		RouterModule,
 		CommonModule,
 		FormsModule,
 		CommonComponentsModule,

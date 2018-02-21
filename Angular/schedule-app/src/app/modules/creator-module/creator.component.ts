@@ -14,6 +14,7 @@ import {ScheduleService} from "@app/services/schedule.service";
 import {Router} from "@angular/router";
 import {InfoDialogComponent} from "@app/modules/creator-module/components/info-dialog/info-dialog.component";
 import { CookieService } from 'ngx-cookie-service';
+import {RootScopeService} from "@app/services/root-scope.service";
 
 @Component({
 	selector: 'creator-component',
@@ -78,7 +79,8 @@ export class CreatorComponent implements OnInit {
 		this.isScheduleInit = true;
 	}
 
-	constructor(private dialog: MatDialog, private fb: FormBuilder, private scheduleService: ScheduleService, private router: Router, private cookieService: CookieService) {
+	constructor(private dialog: MatDialog, private fb: FormBuilder, private scheduleService: ScheduleService, private router: Router, private cookieService: CookieService, private rootScope: RootScopeService) {
+
 	}
 
 	addDaysToWeek(week: Week) {
@@ -184,18 +186,21 @@ export class CreatorComponent implements OnInit {
 			const dialogRef = this.dialog.open(ScheduleDialogComponent, {
 				width: '500px',
 				data: {name: '', weeks: []},
-				disableClose: true
 			});
 			dialogRef.afterClosed().subscribe(result => {
-				console.log('The dialog was closed');
-				this.schedule = result;
-				this.schedule.isSecondWeekExists = false;
-				this.schedule.isShowEmptyPairs = true;
-				this.schedule.countOfWorkDays = CreatorComponent.DEFAULT_COUNT_OF_WORK_DAYS;
-				this.schedule.createDate = new Date();
-				console.log('schedule', this.schedule);
-				this.addWeeks();
-				this.openInfoDialog();
+				if (!result){
+					this.router.navigate(['/browse/list']);
+				} else {
+					console.log('The dialog was closed');
+					this.schedule = result;
+					this.schedule.isSecondWeekExists = false;
+					this.schedule.isShowEmptyPairs = true;
+					this.schedule.countOfWorkDays = CreatorComponent.DEFAULT_COUNT_OF_WORK_DAYS;
+					this.schedule.createDate = new Date();
+					console.log('schedule', this.schedule);
+					this.addWeeks();
+					this.openInfoDialog();
+				}
 			});
 		});
 
@@ -204,13 +209,13 @@ export class CreatorComponent implements OnInit {
 
 	openInfoDialog(): void {
 		setTimeout(() => {
-			if (this.cookieService.get('ISINFOADDDIALOGSHOWED') !== 'true') {
+			if ((this.cookieService.get('ISINFOADDDIALOGSHOWED') !== 'true') && (window.screen.width > 999)){
 				const dialogRef = this.dialog.open(InfoDialogComponent, {
 					width: '500px',
-					disableClose: true
 				});
 				dialogRef.afterClosed().subscribe(result => {
 					this.cookieService.set('ISINFOADDDIALOGSHOWED', 'true');//put('ISINFOADDDIALOGSHOWED', "true");
+
 				});
 			}
 		});

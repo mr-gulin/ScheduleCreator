@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {RootScopeService} from "@app/services/root-scope.service";
 
 @Component({
@@ -13,11 +13,17 @@ export class ToolbarComponent {
 		{title: 'Новое расписание', link: '/create'}
 	];
 
+	@Output() drawerToggle = new EventEmitter();
+
 	constructor(private rootScope: RootScopeService){
 
 	}
 
 	onHomeClick(){
 		this.rootScope.isShowToolbar = false;
+	}
+
+	drawer(){
+		this.drawerToggle.emit();
 	}
 }

@@ -1,3 +1,22 @@
-<toolbar-app [ngClass]="{'transparent': !rootScope.isShowToolbar}"></toolbar-app>
-<router-outlet></router-outlet>
-<div style="position: fixed; bottom: 5px; left: 5px; color: #777">ver. {{version}}</div>
+<mat-sidenav-container class="wrapper">
+    <mat-sidenav class="drawer" #sidenav mode="push">
+        <mat-toolbar color="primary">
+            <mat-toolbar-row>
+                <div class="title-text-drawer title" routerLink="/" (click)="sidenav.toggle()">
+                    Schedule creator
+                </div>
+            </mat-toolbar-row>
+        </mat-toolbar>
+        <div class="buttons-wrapper">
+            <a class="sidenav-li" mat-button *ngFor="let button of buttons" routerLinkActive="sidenav-li-active"
+               [routerLink]="button.link" (click)="sidenav.toggle()">{{button.title}}</a>
+        </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <toolbar-app (drawerToggle)="sidenav.toggle()"
+                     [ngClass]="{'transparent': !rootScope.isShowToolbar}"></toolbar-app>
+        <router-outlet></router-outlet>
+        <div style="position: fixed; bottom: 5px; left: 5px; color: #777">ver. {{version}}</div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,8 +1,10 @@
-.wrapper{
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
+.wrapper {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 30%;
 }
-.field-full-width{
-  width: 100%;
+
+.field-full-width {
+    width: 100%;
 }

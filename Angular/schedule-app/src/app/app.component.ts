@@ -10,8 +10,18 @@ import {RootScopeService} from "@app/services/root-scope.service";
 export class AppComponent {
 	title = 'app';
 	version = environment.version;
+	isOpened = false;
+
+	buttons = [
+		{title: 'Мои расписания', link: '/browse'},
+		{title: 'Новое расписание', link: '/create'}
+	];
 
 	constructor(private rootScope: RootScopeService){
 
+	}
+
+	showSideBar(){
+		this.isOpened = true;
 	}
 }

@@ -10,7 +10,7 @@ export class WelcomeComponent implements OnInit, OnDestroy{
 	title = 'app';
 
 	constructor(private rootScope: RootScopeService){
-
+		rootScope.isShowToolbar = false;
 	}
 
 	ngOnInit(){

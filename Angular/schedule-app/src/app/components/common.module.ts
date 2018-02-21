@@ -20,16 +20,14 @@ import {ColorPickerModule} from "angular2-color-picker/lib/color-picker.module";
 import {ReactiveFormsModule} from "@angular/forms";
 import {NgAutoCompleteModule} from "ng-auto-complete";
 import {ComingSoonComponent} from "@app/components/coming-soon/coming-soon.component";
-
-
-
+import {MatSidenavModule} from '@angular/material/sidenav';
 
 @NgModule({
 	declarations: [
 		ToolbarComponent,
 		FloatingButtonComponent,
 		SettingsComponent,
-		ComingSoonComponent
+		ComingSoonComponent,
 	],
 	imports: [
 		RouterModule,
@@ -47,6 +45,7 @@ import {ComingSoonComponent} from "@app/components/coming-soon/coming-soon.compo
 		MatAutocompleteModule,
 		ReactiveFormsModule,
 		NgAutoCompleteModule,
+		MatSidenavModule
 	],
 	exports: [
 		ToolbarComponent,
@@ -65,6 +64,8 @@ import {ComingSoonComponent} from "@app/components/coming-soon/coming-soon.compo
 		ReactiveFormsModule,
 		NgAutoCompleteModule,
 		ComingSoonComponent,
+		MatSidenavModule,
+		MatToolbarModule
 	],
 	providers: [],
 	bootstrap: []
