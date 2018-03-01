@@ -1,12 +1,14 @@
 import {Week} from '@app/modules/creator-module/classes/week.class';
 
 export class Schedule {
+	private _id: number;
 	private _name: string;
 	private _weeks: Week[];
 	private _countOfWorkDays: number;
 	private _isSecondWeekExists: boolean;
 	private _isShowEmptyPairs: boolean;
 	private _createDate: any;
+	private _userId: number;
 
 	constructor(data?: any) {
 		this._weeks = data || [];
@@ -58,5 +60,21 @@ export class Schedule {
 
 	set createDate(value: any) {
 		this._createDate = value;
+	}
+
+	get id(): number {
+		return this._id;
+	}
+
+	set id(value: number) {
+		this._id = value;
+	}
+
+	get userId(): number {
+		return this._userId;
+	}
+
+	set userId(value: number) {
+		this._userId = value;
 	}
 }
