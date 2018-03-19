@@ -1,8 +1,10 @@
 import {Pair} from '@app/modules/creator-module/classes/pair.class';
 
 export class Day {
+	private _id: number;
 	private _name: string;
 	private _sysname: any;
+	private _weekId: number;
 	private _pairs: Pair[];
 
 	constructor(data?: any) {
@@ -31,5 +33,21 @@ export class Day {
 
 	set sysname(value: any) {
 		this._sysname = value;
+	}
+
+	get id(): number {
+		return this._id;
+	}
+
+	set id(value: number) {
+		this._id = value;
+	}
+
+	get weekId(): number {
+		return this._weekId;
+	}
+
+	set weekId(value: number) {
+		this._weekId = value;
 	}
 }

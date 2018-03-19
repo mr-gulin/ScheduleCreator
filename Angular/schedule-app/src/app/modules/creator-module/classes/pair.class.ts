@@ -1,6 +1,7 @@
 import {Color} from 'highcharts';
 
 export class Pair {
+	private _id: number;
 	private _num: number;
 	private _type: string;
 	private _name: string;
@@ -9,6 +10,7 @@ export class Pair {
 	private _color: string;
 	private _isEditMode: boolean = true;
 	private _systemType: string;
+	private _dayId: number;
 
 	constructor(data?: any) {
 		if (data) {
@@ -83,5 +85,21 @@ export class Pair {
 
 	set systemType(value: string) {
 		this._systemType = value;
+	}
+
+	get id(): number {
+		return this._id;
+	}
+
+	set id(value: number) {
+		this._id = value;
+	}
+
+	get dayId(): number {
+		return this._dayId;
+	}
+
+	set dayId(value: number) {
+		this._dayId = value;
 	}
 }
