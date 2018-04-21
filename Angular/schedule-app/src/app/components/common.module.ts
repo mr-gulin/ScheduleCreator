@@ -21,6 +21,9 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {NgAutoCompleteModule} from "ng-auto-complete";
 import {ComingSoonComponent} from "@app/components/coming-soon/coming-soon.component";
 import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatTableModule} from '@angular/material/';
+import { Ng2AutoCompleteModule } from 'ng2-auto-complete';
+
 
 @NgModule({
 	declarations: [
@@ -45,7 +48,9 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 		MatAutocompleteModule,
 		ReactiveFormsModule,
 		NgAutoCompleteModule,
-		MatSidenavModule
+		MatSidenavModule,
+		MatTableModule,
+		Ng2AutoCompleteModule
 	],
 	exports: [
 		ToolbarComponent,
@@ -65,7 +70,9 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 		NgAutoCompleteModule,
 		ComingSoonComponent,
 		MatSidenavModule,
-		MatToolbarModule
+		MatToolbarModule,
+		MatTableModule,
+		Ng2AutoCompleteModule
 	],
 	providers: [],
 	bootstrap: []

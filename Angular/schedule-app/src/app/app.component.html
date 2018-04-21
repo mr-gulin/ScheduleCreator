@@ -15,7 +15,9 @@
 
     <mat-sidenav-content>
         <toolbar-app (drawerToggle)="sidenav.toggle()" [ngClass]="{'transparent': !rootScope.isShowToolbar}"></toolbar-app>
-        <router-outlet></router-outlet>
+        <div class="page">
+          <router-outlet></router-outlet>
+        </div>
         <div style="position: fixed; bottom: 5px; left: 5px; color: #777">ver. {{version}}</div>
     </mat-sidenav-content>
 </mat-sidenav-container>

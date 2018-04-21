@@ -65,39 +65,43 @@
                                  [cpPosition]="'bottom'"></div>
                             <div *ngIf="!pair.isEditMode" class="mat-mini-fab mat-accent color-picker"
                                  [style.background]="pair.color"></div>
-                            <form #f="ngForm" class="pair-wrapper" *ngIf="pair.isEditMode">
-                                <mat-form-field>
-                                    <input matInput focusFirst [(ngModel)]="pair.name" #name{{weekNum}}{{dayNum}}{{i}}="ngModel"
+                            <form #f="ngForm" class="pair-wrapper-edit" *ngIf="pair.isEditMode">
+                                <mat-form-field class="pair-item">
+                                    <input matInput [focusFirst]="true" [(ngModel)]="pair.name" #input
                                            name="name-{{weekNum}}-{{dayNum}}-{{i}}" [matAutocomplete]="auto"
                                            placeholder="Название предмета"
+                                           (input)="valueChanges($event.target.value)"
+                                           (focus)="valueChanges($event.target.value)"
                                            [required]="true"/>
                                     <mat-autocomplete #auto="matAutocomplete">
-                                        <mat-option *ngFor="let option of autoCompleteGroup" [value]="option.name"
+                                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option.name"
                                                     (onSelectionChange)="chooseExistingPair($event, weekNum, dayNum, i)">
                                             {{ option.name }}
                                         </mat-option>
                                     </mat-autocomplete>
                                 </mat-form-field>
-                                <mat-form-field>
+                                <mat-form-field class="pair-item">
                                     <input matInput [(ngModel)]="pair.type" placeholder="Тип занятия"
                                            #type{{weekNum}}{{dayNum}}{{i}}="ngModel"
                                            name="type-{{weekNum}}-{{dayNum}}-{{i}}" [required]="true"/>
                                 </mat-form-field>
-                                <mat-form-field>
+                                <mat-form-field class="pair-item">
                                     <input matInput [(ngModel)]="pair.classRoom" placeholder="Аудитория"
                                            #classRoom{{weekNum}}{{dayNum}}{{i}}="ngModel"
                                            name="classRoom-{{weekNum}}-{{dayNum}}-{{i}}" [required]="true"/>
                                 </mat-form-field>
-                                <mat-form-field>
+                                <mat-form-field class="pair-item">
                                     <input matInput hotkeyListener
                                            (ctrlEnter)="switchToNewDay($event, dayNum, week, pair, f, false)"
                                            (ctrlShiftEnter)="switchToNewDay($event, dayNum, week, pair, f, true)"
                                            (shiftEnter)="addEmptyPair(day)"
                                            (enter)="submitAndAddNewPair(f, day, pair)"
                                            [(ngModel)]="pair.teacher" placeholder="Преподаватель"
-                                           #teacher{{weekNum}}{{dayNum}}{{i}}="ngModel"
+                                           [focusFirst]="false"
+                                           #teacher
                                            name="teacher-{{weekNum}}-{{dayNum}}-{{i}}" [required]="true"/>
                                 </mat-form-field>
+                                <div class="button-block">
                                 <button *ngIf="pair.isEditMode" color="primary" class="submit-button" mat-button
                                         (click)="submitPair(f, pair, day)">
                                     <mat-icon>done</mat-icon>
@@ -106,28 +110,31 @@
                                         (click)="deletePair(weekNum, dayNum, i)">
                                     <mat-icon>delete</mat-icon>
                                 </button>
+                              </div>
                                 <mat-divider [inset]="true"></mat-divider>
                             </form>
                             <div class="pair-wrapper" *ngIf="!pair.isEditMode && !(pair.systemType==='EMPTY')">
-                                <div class="pair-item">
+                                <div class="pair-item-fixed">
                                     <div class="pair-item-title">Название:</div>
                                     <div class="pair-item-content">{{pair.name}}</div>
                                 </div>
-                                <div class="pair-item">
+                                <div class="pair-item-fixed">
                                     <div class="pair-item-title">Тип:</div>
                                     <div class="pair-item-content">{{pair.type}}</div>
                                 </div>
-                                <div class="pair-item">
+                                <div class="pair-item-fixed">
                                     <div class="pair-item-title">Аудитория:</div>
                                     <div class="pair-item-content">{{pair.classRoom}}</div>
                                 </div>
-                                <div class="pair-item">
+                                <div class="pair-item-fixed">
                                     <div class="pair-item-title">Преподаватель:</div>
                                     <div class="pair-item-content">{{pair.teacher}}</div>
                                 </div>
+                                <div class="button-block">
                                 <button color="primary" class="submit-button" mat-button (click)="editPair(pair)">
                                     <mat-icon>edit</mat-icon>
                                 </button>
+                              </div>
                                 <mat-divider [inset]="true"></mat-divider>
                             </div>
                             <div class="pair-wrapper" *ngIf="!pair.isEditMode && (pair.systemType==='EMPTY')">

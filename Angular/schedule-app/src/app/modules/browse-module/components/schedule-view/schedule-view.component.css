@@ -15,28 +15,46 @@
 }
 .weeks-wrapper{
     width: 100%;
-    display: flex;
+    /* display: table-cell;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-between; */
 }
 .week:first-child{
     border-color: #000 !important;
     border-right: 3px solid #000;
+    float: left;
     width: 48%;
+    flex: 48%;
 }
 .week:last-child{
     border-color: #000 !important;
     width: 48%;
+    float: right;
     border-left: 3px solid #000;
+    flex: 48%;
 }
 
-.week-one{
-    width: 100% !important;
+.week{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.week-several{
+  width: 48%;
+  display: flex;
+}
+
+.week-only{
+  width: 100% !important;
 }
 .week-name{
     width: 100%;
     text-align: center;
     font-size: 25px;
+}
+
+.weekSchedule {
+  width: 100%;
 }
 
 .day{
@@ -65,6 +83,19 @@
     /*padding-left: 5%;*/
     /*border-right: 1px solid #000;*/
     text-align: center;
+    width: 24%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-right: 1px solid #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pairs-wrapper{
+  width: 100%;
+  display: flex;
+  border-bottom: 1px solid #000;
 }
 
 .pair-item:last-child{
@@ -74,11 +105,16 @@
 .pair{
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    width: 100%;
     margin-bottom: 10px;
     padding-left: 15px;
     padding-right: 15px;
 }
 .number{
-    width: 5%;
+    width: 4% !important;
+}
+.spacer{
+  width: 4%;
+  border-right: 1px solid #000;
+  border-left: 1px solid #000;
 }

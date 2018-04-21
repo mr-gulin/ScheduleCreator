@@ -1,4 +1,4 @@
-import {Component, EventEmitter, HostListener, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, HostListener, Input, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {Schedule} from '@app/modules/creator-module/classes/schedule.class';
 import {MatDialog, MatDialogRef} from '@angular/material';
 import {ScheduleDialogComponent} from '@app/modules/creator-module/components/schedule-dialog/schedule-dialog.component';
@@ -15,6 +15,7 @@ import {Router} from "@angular/router";
 import {InfoDialogComponent} from "@app/modules/creator-module/components/info-dialog/info-dialog.component";
 import { CookieService } from 'ngx-cookie-service';
 import {RootScopeService} from "@app/services/root-scope.service";
+import "rxjs/add/observable/of";
 
 @Component({
 	selector: 'creator-component',
@@ -27,8 +28,11 @@ export class CreatorComponent implements OnInit {
 	public static DEFAULT_COUNT_OF_WORK_DAYS = 6;
 
 	@ViewChild('f') form: NgForm;
+	@ViewChild('auto') autoComplete: any;
+	@ViewChild('input') input: ElementRef;
 
 	autoCompleteGroup: any[] = [];
+	filteredOptions: Observable<any[]>;
 
 	schedule: Schedule;
 	oddWeekName = CreatorComponent.DEFAULT_ODD_WEEK_NAME;
@@ -83,6 +87,22 @@ export class CreatorComponent implements OnInit {
 
 	}
 
+	valueChanges(data: string){
+		this.updateFilteredOptions(data);
+	}
+
+	updateFilteredOptions(data: any){
+		if (data){
+			let options = this.autoCompleteGroup.filter((pair: Pair) => {
+				console.log("PAIR", pair);
+				return (pair && pair.name && (pair.name.startsWith(data)));
+			})
+			this.filteredOptions = Observable.of(options);
+		} else {
+			this.filteredOptions = Observable.of(null);
+		}
+	}
+
 	addDaysToWeek(week: Week) {
 		for (let i = 0; i < this.schedule.countOfWorkDays; i++) {
 			const day = new Day();
@@ -102,7 +122,6 @@ export class CreatorComponent implements OnInit {
 					} else {
 						if (countNow < this.schedule.countOfWorkDays) {
 							for (let i = week.days.length; i < this.schedule.countOfWorkDays; i++) {
-								debugger;
 								const day = new Day();
 								day.name = this.weekDays[i].name;
 								day.sysname = this.weekDays[i].sysname;

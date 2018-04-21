@@ -12,18 +12,25 @@
             <div class="day" *ngIf="!isEmpty(day)">
                 <div class="day-name">{{day.name}}</div>
                 <div class="weeks-wrapper">
-                        <table class="week" [ngClass]="{'week-one': !schedule.isSecondWeekExists}" border="1" *ngFor="let week of day.weeks">
-
-                            <tr [style.background]="pair.color" class="pairs-wrapper" [hidden]="!isShowPair(pair)" *ngFor="let pair of week.pairs; let pairNum=index">
-                                <!--<tr class="pair">-->
-                                    <td class="pair-item number">{{pairNum+1}}</td>
-                                    <td class="pair-item">{{pair.type}}</td>
-                                    <td class="pair-item">{{pair.name}}</td>
-                                    <td class="pair-item">{{pair.teacher}}</td>
-                                    <td class="pair-item">{{pair.classRoom}}</td>
-                                <!--</tr>-->
-                            </tr>
-                        </table>
+                        <div class="weekSchedule" style="table-layout: fixed;" border="1" >
+                            <div class="pairs-wrapper" *ngFor="let masterPair of day.pairs; let pairNum=index">
+                                  <div class="week-several" [ngClass]="{'week-only': !schedule.isSecondWeekExists}">
+                                    <div [style.background]="masterPair.pairWeek1.color" class="pair-item number">{{pairNum+1}}</div>
+                                    <div [style.background]="masterPair.pairWeek1.color" class="pair-item">{{masterPair.pairWeek1.type}}</div>
+                                    <div [style.background]="masterPair.pairWeek1.color" class="pair-item">{{masterPair.pairWeek1.name}}</div>
+                                    <div [style.background]="masterPair.pairWeek1.color" class="pair-item">{{masterPair.pairWeek1.teacher}}</div>
+                                    <div [style.background]="masterPair.pairWeek1.color" class="pair-item">{{masterPair.pairWeek1.classRoom}}</div>
+                                  </div>
+                                  <div class="spacer" *ngIf="schedule.isSecondWeekExists"></div>
+                                  <div class="week-several" *ngIf="schedule.isSecondWeekExists">
+                                    <div [style.background]="masterPair.pairWeek2.color" class="pair-item number">{{pairNum+1}}</div>
+                                    <div [style.background]="masterPair.pairWeek2.color" class="pair-item">{{masterPair.pairWeek2.type}}</div>
+                                    <div [style.background]="masterPair.pairWeek2.color" class="pair-item">{{masterPair.pairWeek2.name}}</div>
+                                    <div [style.background]="masterPair.pairWeek2.color" class="pair-item">{{masterPair.pairWeek2.teacher}}</div>
+                                    <div [style.background]="masterPair.pairWeek2.color" class="pair-item">{{masterPair.pairWeek2.classRoom}}</div>
+                                  </div>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>

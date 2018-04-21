@@ -46,65 +46,54 @@ export class ScheduleViewComponent implements OnInit {
 		return false;
 	}
 
+	getAllPairsByWeekNumberAndDaySysname(weekNumber: number, daySysname: string): Pair[]{
+		for (let week of this.schedule.weeks){
+			if (week && week.days){
+				for (let day of week.days){
+					if (day && day.pairs) {
+						if (day.sysname === daySysname){
+							if (week.number === weekNumber){
+								return day.pairs;
+							}
+						}
+					}
+				}
+			}
+		}
+		return [];
+	}
+
 	remap(){
 		this.scheduleView = [];
 		this.weekDays.forEach((weekDay: any) => {
 			let day: any = {};
 			day.name = weekDay.name;
 			day.sysname = weekDay.sysname;
-			day.weeks = [];
-			if (this.schedule && this.schedule.weeks) {
-				this.schedule.weeks.forEach((week: Week) => {
-					if (week && week.days) {
-						let weekView: any = {};
-						weekView.name = week.name;
-						weekView.pairs = [];
-						week.days.forEach((day: Day) => {
-							if (day.sysname === weekDay.sysname) {
-								weekView.pairs = day.pairs;
-							}
-						});
-						day.weeks.push(weekView);
+			day.pairs = [];
+			let pairsWeek1: Pair[] = this.getAllPairsByWeekNumberAndDaySysname(1, day.sysname);
+			debugger;
+			let pairsWeek2: Pair[] = this.getAllPairsByWeekNumberAndDaySysname(2, day.sysname);
+			for (let i=0; i<pairsWeek1.length; i++){
+					let masterPair: any = {};
+					let pairWeek1: Pair = pairsWeek1[i];
+					let pairWeek2: Pair;
+					if (pairsWeek2[i]){
+						pairWeek2 = pairsWeek2[i];
+					} else {
+						pairWeek2 = new Pair();
+						pairWeek2.type = '';
+						pairWeek2.name = '';
+						pairWeek2.color = '#fff';
+						pairWeek2.teacher = '';
 					}
-				});
+					masterPair.pairWeek1 = pairWeek1;
+					masterPair.pairWeek2 = pairWeek2;
+					day.pairs.push(masterPair);
 			}
 			this.scheduleView.push(day);
 			console.log('scheduleView', this.scheduleView);
 		});
-		this.addEmptyPairsToTheEnd();
-	}
 
-	addEmptyPairsToTheEnd(){
-		let index: number = 0;
-		if (this.scheduleView && this.schedule.isSecondWeekExists){
-			this.scheduleView.forEach((day:any) => {
-				if (day && day.weeks){
-					if (day.weeks[0] && day.weeks[1] && day.weeks[0].pairs && day.weeks[1].pairs){
-						if (day.weeks[0].pairs.length > day.weeks[1].pairs.length){
-							index = day.weeks[0].pairs.length - day.weeks[1].pairs.length;
-							for (let i=0; i<index; i++){
-								const pair = new Pair();
-								pair.type = '';
-								pair.name = '';
-								pair.color = '#fff';
-								pair.teacher = '';
-								day.weeks[1].pairs.push(pair);
-							}
-						} else if (day.weeks[0].pairs.length < day.weeks[1].pairs.length){
-							index = day.weeks[1].pairs.length - day.weeks[0].pairs.length;
-							for (let i=0; i<index; i++){
-								const pair = new Pair();
-								pair.type = '';
-								pair.name = '';
-								pair.color = '#fff';
-								pair.teacher = '';
-								day.weeks[0].pairs.push(pair);
-							}
-						}
-					}
-				}
-			});
-		}
 	}
 
 	isShowPair(pair: any){
@@ -116,13 +105,10 @@ export class ScheduleViewComponent implements OnInit {
 
 	isEmpty(day: any){
 		let res = true;
-		if (day && day.weeks){
-			day.weeks.forEach((week: any) => {
-				if (week && week.pairs && (week.pairs.length > 0)) {
+		if (day && day.pairs){
+			if (day.pairs.length > 0)
 					res = false;
-				}
-			});
-		}
+	  }
 		return res;
 	}
 

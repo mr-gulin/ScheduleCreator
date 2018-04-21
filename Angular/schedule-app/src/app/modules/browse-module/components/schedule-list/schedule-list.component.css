@@ -1,6 +1,5 @@
 .schedule-card{
-    width: 90%;
-    margin-left: 5%;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     margin-bottom: 15px;

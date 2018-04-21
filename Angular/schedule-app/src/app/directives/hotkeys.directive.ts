@@ -15,7 +15,6 @@ export class HotkeysDirective {
 
 	@HostListener('keypress', ['$event'])
 	keyPress(event: KeyboardEvent) {
-		debugger;
 		if (!event.shiftKey && event.ctrlKey && event.keyCode == 10){
 			this.ctrlEnter.emit();
 		}
